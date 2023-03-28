@@ -1,6 +1,5 @@
 import Head from "next/head";
 import Link from "next/link";
-import { NavBar } from "@/components/nav-bar";
 
 export default function Home() {
   return (
@@ -11,7 +10,6 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <NavBar />
 
       <main className="px-8 lg:px-16 text-center flex flex-col text-white items-center justify-center bg-gradient-to-br from-neutral-600 via-teal-900  to-cyan-700 h-screen">
         <h1 className="hero-text--title font-mono font-bold text-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl">

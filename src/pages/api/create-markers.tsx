@@ -103,11 +103,16 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     .catch((err) => console.error(err));
 
   // Clear the cache
-  fs.unlink(`./cache/`, (err) => {
-    if (err) {
-      console.error(`Error clearing cache for customers`, err);
-    }
-  });
+  // Clear each customer's cache individually
+  // This is hardcoded to 4 customers
+  const customers = ["customer-1", "customer-2", "customer-3", "customer-4"];
+  for (var customer in customers) {
+    fs.unlink(`./cache/${customers[customer]}.json`, (err) => {
+      if (err) {
+        console.error(`Error clearing cache for customer 1`, err);
+      }
+    });
+  }
 
   return res.status(200).json({ message: "Success" });
 }

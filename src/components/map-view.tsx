@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { MapRef, Source, Layer, Map, Popup, Point } from "react-map-gl";
+import { MapRef, Source, Layer, Map, Point } from "react-map-gl";
 import { FeatureCollection, Geometry } from "geojson";
 import Link from "next/link";
 

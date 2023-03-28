@@ -1,5 +1,4 @@
 import MapView from "@/components/map-view";
-import { NavBar } from "@/components/nav-bar";
 import { FeatureCollection, Geometry } from "geojson";
 import Head from "next/head";
 import { useState, useEffect } from "react";
@@ -62,7 +61,6 @@ export default function MapPage() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <NavBar />
 
       <main className="flex flex-col h-screen items-center pt-24">
         <div className="flex flex-col gap-4 p-8 items-center justify-start ">
@@ -101,7 +99,7 @@ export default function MapPage() {
             </span>
             <input
               placeholder="Search sensor by id"
-              className="w-44 h-10 rounded-md drop-shadow-xl text-center"
+              className="w-44 h-10 rounded-md shadow-inner border-2 border-slate-200 text-center"
               type="number"
               min={inputRange[0]}
               max={inputRange[1]}
