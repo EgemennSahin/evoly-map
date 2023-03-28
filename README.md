@@ -6,8 +6,9 @@ This is a web application that displays the location of waste collection sensors
 
 - Displays the location of waste collection sensors on a map.
 - Retrieves sensor location, customer information, and icons from DynamoDB.
-- Caches and saves the data for optimal speed.
-- Allows you to select a customer and see the sensors associated with them.
+- Caches and saves the data for r and see the sensors associated with them, as well as search sensor by id.
+- Shows further information foroptimal speed.
+- Allows you to select a custome a sensor upon clicking on it.
 - (Additional) Streamlines the Calendly demo process to keep users on the website
 
 ## Development Documentation
