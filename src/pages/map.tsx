@@ -3,7 +3,6 @@ import { NavBar } from "@/components/nav-bar";
 import { createGeoJSONFromMarkers } from "@/helpers/data";
 import { FeatureCollection, Geometry } from "geojson";
 import Head from "next/head";
-import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export default function HomePage({
@@ -71,12 +70,15 @@ export default function HomePage({
 }
 
 export async function getServerSideProps(context: any) {
-  const res = await fetch("http://localhost:3000/api/get-markers", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  const res = await fetch(
+    "https://egemen-sahin-evoly-assessment.vercel.app/api/get-markers",
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
 
   const data = await res.json();
 
