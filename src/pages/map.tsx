@@ -5,26 +5,36 @@ import { FeatureCollection, Geometry } from "geojson";
 import Head from "next/head";
 import { useState, useEffect } from "react";
 
-export default function HomePage({
-  coordinates,
-}: {
-  coordinates: FeatureCollection<Geometry>;
-}) {
+export default function HomePage() {
   const numberOptions = [10, 100, 1000, 10000];
   const [selectedOption, setSelectedOption] = useState<number>(0);
 
-  const [coordinateData, setCoordinateData] =
-    useState<FeatureCollection<Geometry>>(coordinates);
+  const [coordinateData, setCoordinateData] = useState<
+    FeatureCollection<Geometry>
+  >({ type: "FeatureCollection", features: [] });
 
   useEffect(() => {
-    const newCoordinates = {
-      type: coordinates.type,
-      features: coordinates.features.slice(
-        numberOptions[selectedOption - 1] || 0,
-        numberOptions[selectedOption]
-      ),
-    };
-    setCoordinateData(newCoordinates);
+    async function getMarkers(customerId: string) {
+      console;
+      const res = await fetch("/api/get-markers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          customerId: customerId,
+        }),
+      });
+      const data = await res.json();
+      console.log("data", customerId);
+      setCoordinateData(data);
+    }
+
+    function getCustomerIdFromIndex(index: number) {
+      return `customer-${index + 1}`;
+    }
+
+    getMarkers(getCustomerIdFromIndex(selectedOption)).catch(console.error);
   }, [selectedOption]);
 
   return (
@@ -38,6 +48,21 @@ export default function HomePage({
       <NavBar />
 
       <main className="flex flex-col h-screen gap-2 items-center pt-24">
+        <button
+          onClick={async () => {
+            await fetch("/api/create-markers", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                numberOfMarkers: 11110,
+              }),
+            });
+          }}
+        >
+          hi
+        </button>
         <div className="flex flex-col gap-4 p-8 items-center justify-start ">
           <h1 className="text-4xl">Our deployed sensors</h1>
           <p className="text-slate-800">
@@ -67,26 +92,4 @@ export default function HomePage({
       </main>
     </>
   );
-}
-
-export async function getStaticProps() {
-  const res = await fetch(
-    "https://egemen-sahin-evoly-assessment.vercel.app/api/get-markers",
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-
-  const data = await res.json();
-
-  const coordinates = createGeoJSONFromMarkers(data);
-
-  return {
-    props: {
-      coordinates,
-    },
-  };
 }

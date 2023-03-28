@@ -2,6 +2,7 @@ import { Feature, FeatureCollection, Geometry } from "geojson";
 
 export interface MarkerData {
   id: number;
+  customerId: string;
   coordinates: {
     latitude: number;
     longitude: number;
