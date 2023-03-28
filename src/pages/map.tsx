@@ -69,7 +69,7 @@ export default function HomePage({
   );
 }
 
-export async function getServerSideProps(context: any) {
+export async function getStaticProps() {
   const res = await fetch(
     "https://egemen-sahin-evoly-assessment.vercel.app/api/get-markers",
     {
