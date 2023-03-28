@@ -1,7 +1,7 @@
 import { Feature, FeatureCollection, Geometry } from "geojson";
 
 export interface MarkerData {
-  id: number;
+  markerId: number;
   customerId: string;
   coordinates: {
     latitude: number;
@@ -17,7 +17,7 @@ export function createGeoJSONFromMarkers(
   const features: Feature<Geometry>[] = markers.map((item) => ({
     type: "Feature",
     properties: {
-      id: item.id,
+      markerId: item.markerId,
       icon: item.icon,
     },
     geometry: {
@@ -35,7 +35,7 @@ export function createGeoJSONFromMarkers(
 export function getMapboxIconNames() {
   // This data comes from https://github.com/mapbox/mapbox-gl-styles/tree/master/sprites/basic-v8/_svg
   // There is no other way to get this data from Mapbox GL JS, so I scraped it from their website
-  return [
+  const allIcons = [
     "airfield-15",
     "airport-15",
     "alcohol-shop-15",
@@ -121,4 +121,25 @@ export function getMapboxIconNames() {
     "volcano-15",
     "zoo-15",
   ];
+
+  // Furthermore, the following icons were removed from the list because they are not available:
+  const invalidIcons = [
+    "america-football-15",
+    "baseball-15",
+    "bicycle-share-15",
+    "bus-15",
+    "circle-stroked-15",
+    "circle-15",
+    "sushi-15",
+    "star-15",
+    "rail-metro-15",
+    "triangle-stroked-15",
+    "rail-light-15",
+    "ferry-15",
+    "rail-15",
+    "triangle-15",
+    "hairdresser-15",
+  ];
+
+  return allIcons.filter((icon) => !invalidIcons.includes(icon));
 }
