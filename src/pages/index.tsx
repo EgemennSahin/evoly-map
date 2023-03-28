@@ -36,7 +36,7 @@ export default function Home() {
               className="w-fit mt-6 px-8 py-2 border-2 border-teal-500  hover:bg-teal-700 transition-colors font-semibold rounded-md hover:shadow-md"
               href="/map"
             >
-              See our deployed sensors
+              See our map of sensors
             </Link>
           </div>
         </div>

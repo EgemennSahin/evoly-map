@@ -28,21 +28,21 @@
 
 .cta {
   animation: move-in 1s ease-in-out;
-  animation-delay: 1s;
+  animation-delay: 0.75s;
   animation-fill-mode: forwards;
   opacity: 0;
 }
 
 .hero-text--title {
   animation: fold-in 1s ease-in-out;
-  animation-delay: 0.33s;
+  animation-delay: 0.25s;
   animation-fill-mode: forwards;
   opacity: 0;
 }
 
 .hero-text--header {
   animation: fold-in 1s ease-in-out;
-  animation-delay: 0.66s;
+  animation-delay: 0.5s;
   animation-fill-mode: forwards;
   opacity: 0;
 }
