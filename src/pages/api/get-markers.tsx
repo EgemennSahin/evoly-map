@@ -20,7 +20,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         return res.status(200).json([]);
       }
 
-      // Unmarshall the data
+      // Unmarshall the data from DynamoDB's format to JSON
       const markers = data.Items.map((item) => {
         return AWS.DynamoDB.Converter.unmarshall(item);
       });

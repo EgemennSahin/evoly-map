@@ -9,6 +9,7 @@ export interface MarkerData {
   icon: string;
 }
 
+// Mapbox GL JS requires a FeatureCollection of GeoJSON features, so we need to convert our data to that format
 export function createGeoJSONFromMarkers(
   markers: MarkerData[]
 ): FeatureCollection<Geometry> {
@@ -20,7 +21,7 @@ export function createGeoJSONFromMarkers(
     },
     geometry: {
       type: "Point",
-      coordinates: [item.coordinates.latitude, item.coordinates.longitude],
+      coordinates: [item.coordinates.longitude, item.coordinates.latitude],
     },
   }));
 

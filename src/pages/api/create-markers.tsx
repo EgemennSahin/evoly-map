@@ -1,4 +1,3 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { dynamoDB } from "@/config/aws";
 import { getMapboxIconNames } from "@/helpers/data";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -11,6 +10,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).json({ error: "Missing query parameter" });
   }
 
+  // DynamoDB formatting for coordinates
+  // S = string
+  // M = map
+  // N = number
   const markers: {
     icon: {
       S: string;
@@ -29,6 +32,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const mapboxIconNames = getMapboxIconNames();
 
+  // Create random coordinates with random mapbox icon names
+  // The coordinates are fixed to 6 decimal places to optimize DynamoDB storage and Mapbox rendering while still being accurate enough
   for (let i = 0; i < parseInt(numberOfCoordinates as string); i++) {
     markers.push({
       icon: {
@@ -37,16 +42,17 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       coordinates: {
         M: {
           latitude: {
-            N: (Math.random() * 180 - 90).toString(),
+            N: (Math.random() * 180 - 90).toFixed(6).toString(),
           },
           longitude: {
-            N: (Math.random() * 360 - 180).toString(),
+            N: (Math.random() * 360 - 180).toFixed(6).toString(),
           },
         },
       },
     });
   }
 
+  // Format the coordinates to for DynamoDB batchWriteItem which has a limit of 25 items per request
   const batchSize = 25;
   const batches = [];
   for (let i = 0; i < markers.length; i += batchSize) {
@@ -68,6 +74,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     batches.push(batch);
   }
 
+  // Write the coordinates to DynamoDB in batches
   Promise.all(batches.map((batch) => dynamoDB.batchWriteItem(batch).promise()))
     .then(() => console.log("Items written to table"))
     .catch((err) => console.error(err));
