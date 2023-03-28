@@ -1,11 +1,10 @@
 import MapView from "@/components/map-view";
 import { NavBar } from "@/components/nav-bar";
-import { createGeoJSONFromMarkers } from "@/helpers/data";
 import { FeatureCollection, Geometry } from "geojson";
 import Head from "next/head";
 import { useState, useEffect } from "react";
 
-export default function HomePage() {
+export default function MapPage() {
   const numberOptions = [
     "Customer 1",
     "Customer 2",

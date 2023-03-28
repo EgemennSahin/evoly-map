@@ -34,7 +34,7 @@ export function createGeoJSONFromMarkers(
 
 export function getMapboxIconNames() {
   // This data comes from https://github.com/mapbox/mapbox-gl-styles/tree/master/sprites/basic-v8/_svg
-  // There is no other way to get this data from Mapbox GL JS
+  // There is no other way to get this data from Mapbox GL JS, so I scraped it from their website
   return [
     "airfield-15",
     "airport-15",
