@@ -1,16 +1,17 @@
 import { useRef } from "react";
 import { MapRef, Source, Layer, Map } from "react-map-gl";
+import { FeatureCollection, Geometry } from "geojson";
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
 
-export default function App() {
+export default function MapView({
+  coordinates,
+}: {
+  coordinates: FeatureCollection<Geometry>;
+}) {
   const mapRef = useRef<MapRef>(null);
 
-  // TODO: change url to dynamoDB url
-  const dataEndpoint =
-    "https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson";
-
-  // TODO: change the marker icon to the point's icon which is stored in dynamoDB
+  // Sort out the coordinates according to their icon
 
   return (
     <>
@@ -25,12 +26,12 @@ export default function App() {
         mapboxAccessToken={MAPBOX_TOKEN}
         ref={mapRef}
       >
-        <Source id="earthquakes" type="geojson" data={dataEndpoint}>
+        <Source id="earthquakes" type="geojson" data={coordinates}>
           <Layer
             id="earthquake-markers"
             type="symbol"
             layout={{
-              "icon-image": "marker-15",
+              "icon-image": ["get", "icon"],
               "icon-allow-overlap": true,
               "icon-size": 2,
             }}
