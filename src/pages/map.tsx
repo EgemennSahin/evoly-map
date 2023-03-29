@@ -49,13 +49,11 @@ export default function MapPage() {
 
       <main className="flex flex-col h-screen items-center pt-24">
         <div className="flex flex-col gap-4 p-8 items-center justify-start ">
-          <h1 className="text-4xl">Our deployed sensors</h1>
-          <p className="text-slate-800">
-            This is a map of all our deployed sensors. The number of sensors
-            shown can be changed using the buttons below. <br /> Click on a
-            marker to see more information about the sensor.
+          <h1 className="text-4xl text-center">Our deployed sensors</h1>
+          <p className="text-slate-800 overflow">
+            See the sensors deployed by our customers around the world
           </p>
-          <div className="flex gap-4 justify-between">
+          <div className="grid sm:grid-cols-4 grid-cols-2 gap-4 justify-between">
             {customerOptions.map((option, index) => (
               <button
                 className={`${
@@ -81,7 +79,7 @@ export default function MapPage() {
             ))}
           </div>
 
-          <div className="flex items-center justify-between w-96">
+          <div className="flex items-center gap-4">
             <span className="text-slate-700">
               {currCoordinates.features.length} sensors
             </span>

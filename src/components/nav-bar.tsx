@@ -39,7 +39,15 @@ export function NavBar() {
         >
           evoly
         </Link>
-        <div key="pages" className="flex">
+        <div className="flex sm:hidden">
+          <button
+            onClick={() => {}}
+            className="text-slate-500 hover:text-blue-700 font-extralight"
+          >
+            Browse
+          </button>
+        </div>
+        <div key="pages" className="hidden sm:flex">
           {["energy", "contact"].map((page) => {
             let route = `/${page}`;
 
@@ -47,7 +55,7 @@ export function NavBar() {
             let textStyle =
               router.pathname == route
                 ? "text-blue-700 font-medium"
-                : "text-slate-500 hover:text-blue-700 via:text-teal-400 font-extralight";
+                : "text-slate-500 hover:text-blue-700 font-extralight";
 
             // All links direct to the home page
             return (
