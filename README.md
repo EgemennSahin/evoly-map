@@ -1,14 +1,13 @@
 # evoly Waste Collection Sensor Map
 
-This is a web application that displays the location of waste collection sensors on a map, and allows you to view information about each sensor by clicking on its icon. The application is built using **Next.js**, **TypeScript**, **DynamoDB**, **Mapbox GL** ([React component](https://visgl.github.io/react-map-gl/)), **TailwindCSS**, and **React**.
+This is a web application that displays the location of sensors on a map, and allows you to view information about each sensor by clicking on its icon. The application is built using **Next.js**, **TypeScript**, **DynamoDB**, **Mapbox GL** ([React component](https://visgl.github.io/react-map-gl/)), **TailwindCSS**, and **React**.
 
 ## Features
 
-- Displays the location of waste collection sensors on a map.
-- Retrieves sensor location, customer information, and icons from DynamoDB.
-- Caches and saves the data for r and see the sensors associated with them, as well as search sensor by id.
-- Shows further information foroptimal speed.
-- Allows you to select a custome a sensor upon clicking on it.
+- Displays the location of sensors on a map.
+- Retrieves sensor location, customer information, and icon from DynamoDB.
+- Caches and saves the data for optimal speed
+- Shows further information when selecting a sensor by clicking on it or searching it's id.
 - (Additional) Streamlines the Calendly demo process to keep users on the website
 
 ## Development Documentation
@@ -44,7 +43,7 @@ Several optimization techniques were employed to ensure that the app runs smooth
 
 #### **Caching data**
 
-The API's caching system which caches data from DynamoDB. This technique ensures that the initial loading speed of a set of coordinates is normal, and subsequent loading speeds are minimized by retrieving data from the cache.
+The API's caching system which caches data from DynamoDB. This technique ensures that the initial loading speed of a set of coordinates is standard, and subsequent loading speeds are minimized by retrieving data from the cache.
 
 This technique not only enhances the application's speed but also minimizes network costs since DynamoDB is only called once per coordinate set per user.
 
@@ -58,7 +57,7 @@ Additionally, the iconSize was optimized to a size of 1, which was tested agains
 
 #### **Database schema**
 
-Finally, the DynamoDB table was optimized by setting the customerId as the sort key. This approach ensures that only data for the customer is queried, which removes the need to download the entire dataset and filter out the customer's data.
+Finally, the DynamoDB table was optimized by setting the customerId as the partition key and the markerId as the sort key. This approach ensures that only data for the customer is queried, which removes the need to download the entire dataset and filter out the customer's data.
 
 ## Getting Started
 
@@ -85,3 +84,4 @@ To run this project on your local machine, follow these steps:
 1. After running the application, you will see a landing page with information about the service. From here, you can click on the "See our map of sensors" button to navigate to the map view. Additionally, you can click on "Book a demo" to check out the Calendly implementation.
 2. On the map view, you will see a map of the world with sensor icons displayed on it.
 3. Use the buttons above the map to select a customer and see their sensors. The number of sensors displayed will change based on the selected customer.
+4. Click on a sensor after searching for it, and you will see a popup.
