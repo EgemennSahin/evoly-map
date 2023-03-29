@@ -110,19 +110,6 @@ export default function MapPage() {
           </div>
         </div>
 
-        <button
-          onClick={async () => {
-            await fetch("/api/create-markers", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            });
-          }}
-        >
-          Create markers
-        </button>
-
         <div className="w-5/6 h-full rounded-md drop-shadow-xl">
           <MapView
             searchedMarkerId={searchedMarkerId}

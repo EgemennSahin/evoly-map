@@ -12,65 +12,38 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     return res.status(400).json({ error: "Missing body parameter" });
   }
 
+  // This will cache the response for 2 minutes
+  // This is after the customerId is checked so that the client can fix the error and make a new request
+  // Caching is useful for the client to not make a request to dynamoDB every time the user changes coordinate sets
+  res.setHeader("Cache-Control", "public, s-maxage=120");
+
+  const params = {
+    TableName: "evoly-markers",
+    FilterExpression: "customerId = :customerId",
+    ExpressionAttributeValues: {
+      ":customerId": { S: customerId },
+    },
+  };
+
   return new Promise((resolve, reject) => {
-    fs.readFile(`./cache/${customerId}.json`, "utf-8", (err, data) => {
-      if (!err) {
-        // Convert the data to JSON
-        const customerData = JSON.parse(data);
-        return res.status(200).json(customerData);
+    dynamoDB.scan(params, (err, data) => {
+      if (err) {
+        console.error("Error getting customer data from DynamoDB", err);
+        resolve(
+          res
+            .status(500)
+            .json({ error: "Error getting customer data from DynamoDB" })
+        );
       }
 
-      const params = {
-        TableName: "evoly-markers",
-        FilterExpression: "customerId = :customerId",
-        ExpressionAttributeValues: {
-          ":customerId": { S: customerId },
-        },
-      };
+      // Unmarshall the data from DynamoDB's format to JSON
+      const customerData = data.Items?.map((item) => {
+        return AWS.DynamoDB.Converter.unmarshall(item);
+      }) as MarkerData[];
 
-      return dynamoDB.scan(params, (err, data) => {
-        if (err) {
-          console.error("Error getting customer data from DynamoDB", err);
-          return res
-            .status(500)
-            .json({ error: "Error getting customer data from DynamoDB" });
-        }
+      const geoJson = createGeoJSONFromMarkers(customerData);
 
-        // Unmarshall the data from DynamoDB's format to JSON
-        const customerData = data.Items?.map((item) => {
-          return AWS.DynamoDB.Converter.unmarshall(item);
-        }) as MarkerData[];
-
-        const geoJson = createGeoJSONFromMarkers(customerData);
-
-        // Check if the cache directory exists
-        fs.access("./cache", (err) => {
-          if (err && err.code === "ENOENT") {
-            // If the cache directory doesn't exist, create it
-            fs.mkdir("./cache", (err) => {
-              if (err && err.code !== "EEXIST") {
-                console.error("Error creating cache directory", err);
-              }
-            });
-          }
-        });
-
-        // Cache the data
-        fs.writeFile(
-          `./cache/${customerId}.json`,
-          JSON.stringify(geoJson),
-          (err) => {
-            if (err) {
-              console.error(
-                `Error caching data for customer ${customerId}`,
-                err
-              );
-            }
-          }
-        );
-
-        return res.status(200).json(geoJson);
-      });
+      resolve(res.status(200).json(geoJson));
     });
   });
 }

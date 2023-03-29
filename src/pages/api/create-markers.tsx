@@ -17,7 +17,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   // Create random coordinates with random mapbox icon names
   console.log("Creating items");
-  for (customerIndex in customers) {
+  for (var customerIndex in customers) {
     const customerName = customers[customerIndex].name;
     const numberOfSensors = customers[customerIndex].sensors;
     for (let i = 0; i < numberOfSensors; i++) {
@@ -70,7 +70,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   for (let i = 0; i < batches.length; i++) {
     const batch = batches[i];
-    const result = dynamoDB.batchWriteItem(batch, (err, data) => {
+    dynamoDB.batchWriteItem(batch, (err) => {
       if (err) {
         console.error(`Error writing batch ${i} to DynamoDB`, err);
         return res
@@ -79,16 +79,6 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       }
     });
   }
-
-  // Clear the cache
-  for (var customerIndex in customers) {
-    fs.unlink(`./cache/${customers[customerIndex].name}.json`, (err) => {
-      if (err) {
-        console.error(`Error clearing cache for customer 1`, err);
-      }
-    });
-  }
-  console.log("Cache cleared");
 
   return res.status(200).json({ message: "Success" });
 }
