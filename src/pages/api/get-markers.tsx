@@ -1,5 +1,4 @@
 import { dynamoDB } from "@/config/aws";
-import fs from "fs";
 import { createGeoJSONFromMarkers } from "@/helpers/data";
 import AWS from "aws-sdk";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -29,7 +28,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     dynamoDB.scan(params, (err, data) => {
       if (err) {
         console.error("Error getting customer data from DynamoDB", err);
-        resolve(
+        reject(
           res
             .status(500)
             .json({ error: "Error getting customer data from DynamoDB" })

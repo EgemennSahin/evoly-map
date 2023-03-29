@@ -1,9 +1,8 @@
 import { dynamoDB } from "@/config/aws";
-import fs from "fs";
 import {
   createDynamoDBItemFromMarker,
   getCustomers,
-  getMapboxIconNames,
+  getMapboxIcons,
 } from "@/helpers/data";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MarkerData, MarkerDynamoDBData } from "@/helpers/data-types";
@@ -13,19 +12,18 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const markers: MarkerDynamoDBData[] = [];
 
-  const mapboxIconNames = getMapboxIconNames();
+  const mapboxIcons = getMapboxIcons();
 
   // Create random coordinates with random mapbox icon names
   console.log("Creating items");
+
   for (var customerIndex in customers) {
     const customerName = customers[customerIndex].name;
     const numberOfSensors = customers[customerIndex].sensors;
     for (let i = 0; i < numberOfSensors; i++) {
       const newMarker: MarkerData = {
         markerId: i,
-        icon: mapboxIconNames[
-          Math.floor(Math.random() * mapboxIconNames.length)
-        ],
+        icon: mapboxIcons[Math.floor(Math.random() * mapboxIcons.length)],
         customerId: customerName,
         coordinates: {
           latitude: Math.random() * 180 - 90,
@@ -39,6 +37,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   // Format the coordinates to for DynamoDB batchWriteItem which has a limit of 25 items per request
   console.log("Formatting items for batchWriteItem");
+
   const batchSize = 25;
   const nMarkers = markers.length;
   const batches = [];

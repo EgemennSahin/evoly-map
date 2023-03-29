@@ -1,4 +1,4 @@
-export interface MarkerData {
+export type MarkerData = {
   markerId: number;
   customerId: string;
   coordinates: {
@@ -6,13 +6,13 @@ export interface MarkerData {
     longitude: number;
   };
   icon: string;
-}
+};
 
 // DynamoDB formatting for coordinates
 // S = string
 // M = map
 // N = number
-export interface MarkerDynamoDBData {
+export type MarkerDynamoDBData = {
   markerId: {
     N: string;
   };
@@ -32,4 +32,10 @@ export interface MarkerDynamoDBData {
       };
     };
   };
-}
+};
+
+export type PopupInfo = {
+  x: string;
+  y: string;
+  markerId: number;
+};

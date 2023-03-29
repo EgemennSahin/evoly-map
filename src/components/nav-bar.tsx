@@ -28,7 +28,6 @@ export function NavBar() {
     setCountries(newCountries);
 
     // TODO: Change the language of the page
-    // RESEARCH: Packages to use for this
   }
 
   return (
@@ -42,15 +41,15 @@ export function NavBar() {
         </Link>
         <div key="pages" className="flex">
           {["energy", "contact"].map((page) => {
-            // Routing waste to the homepage
             let route = `/${page}`;
 
             // Changing styling according to current page
             let textStyle =
               router.pathname == route
                 ? "text-blue-700 font-medium"
-                : "text-slate-500 hover:text-blue-700 font-extralight";
+                : "text-slate-500 hover:text-blue-700 via:text-teal-400 font-extralight";
 
+            // All links direct to the home page
             return (
               <Link
                 key={page}

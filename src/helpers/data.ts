@@ -61,7 +61,7 @@ export function getCustomers() {
   ];
 }
 
-export function getMapboxIconNames() {
+export function getMapboxIcons() {
   // This data comes from https://github.com/mapbox/mapbox-gl-styles/tree/master/sprites/basic-v8/_svg
   // There is no other way to get this data from Mapbox GL JS, so I scraped it from their website
   // Furthermore, the following icons were removed from the list because they are not available:
