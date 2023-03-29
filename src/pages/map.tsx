@@ -4,19 +4,26 @@ import Head from "next/head";
 import { useState, useEffect } from "react";
 
 export default function MapPage() {
-  const numberOptions = [
+  // Each customer has a different coordinate set and a different number of sensors ranging from 10 to 10000
+  const customerOptions = [
     "Customer 1",
     "Customer 2",
     "Customer 3",
     "Customer 4",
   ];
+
+  // The selected option is the index of the customerOptions array
   const [selectedOption, setSelectedOption] = useState<number>(0);
+
+  // The searched marker id is the id of the marker that the user searched for
   const [searchedMarkerId, setSearchedMarkerId] = useState<number | null>(null);
 
+  // The coordinate data is the set of coordinates that is used to render the markers on the map
   const [coordinateData, setCoordinateData] = useState<
     FeatureCollection<Geometry>
   >({ type: "FeatureCollection", features: [] });
 
+  // When the selected option changes, fetch the new coordinates
   useEffect(() => {
     async function getMarkers(customerId: string) {
       console;
@@ -40,19 +47,6 @@ export default function MapPage() {
     getMarkers(getCustomerIdFromIndex(selectedOption)).catch(console.error);
   }, [selectedOption]);
 
-  const [inputRange, setInputRange] = useState<[number, number]>([1, 10]);
-
-  useEffect(() => {
-    if (coordinateData.features.length > 0) {
-      const min = Math.min(
-        ...coordinateData.features.map((f) => f.properties?.markerId)
-      );
-      const max = Math.max(
-        ...coordinateData.features.map((f) => f.properties?.markerId)
-      );
-      setInputRange([min, max]);
-    }
-  }, [coordinateData]);
   return (
     <>
       <Head>
@@ -71,7 +65,7 @@ export default function MapPage() {
             marker to see more information about the sensor.
           </p>
           <div className="flex gap-4 justify-between">
-            {numberOptions.map((option, index) => (
+            {customerOptions.map((option, index) => (
               <button
                 className={`${
                   selectedOption === index
@@ -80,12 +74,15 @@ export default function MapPage() {
                 } p-2 rounded-md flex flex-col items-center`}
                 key={index}
                 onClick={() => {
-                  setSelectedOption(index);
-                  // Get the input element and reset it
+                  if (selectedOption === index) return;
+
+                  // Get the input element and reset it's value
                   const input = document.querySelector("input");
                   if (input) {
                     input.value = "";
                   }
+
+                  setSelectedOption(index);
                 }}
               >
                 <span className="text-slate-800">{option}</span>
@@ -95,14 +92,14 @@ export default function MapPage() {
 
           <div className="flex items-center justify-between w-96">
             <span className="text-slate-700">
-              {10 ** (selectedOption + 1)} sensors
+              {coordinateData.features.length} sensors
             </span>
             <input
               placeholder="Search sensor by id"
               className="w-44 h-10 rounded-md shadow-inner border-2 border-slate-200 text-center"
               type="number"
-              min={inputRange[0]}
-              max={inputRange[1]}
+              min={0}
+              max={coordinateData.features.length}
               onChange={(event) => {
                 // Wait for the user to finish typing
                 setTimeout(() => {
@@ -112,6 +109,19 @@ export default function MapPage() {
             />
           </div>
         </div>
+
+        <button
+          onClick={async () => {
+            await fetch("/api/create-markers", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+          }}
+        >
+          Create markers
+        </button>
 
         <div className="w-5/6 h-full rounded-md drop-shadow-xl">
           <MapView

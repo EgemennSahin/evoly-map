@@ -1,14 +1,5 @@
 import { Feature, FeatureCollection, Geometry } from "geojson";
-
-export interface MarkerData {
-  markerId: number;
-  customerId: string;
-  coordinates: {
-    latitude: number;
-    longitude: number;
-  };
-  icon: string;
-}
+import { MarkerData, MarkerDynamoDBData } from "./data-types";
 
 // Mapbox GL JS requires a FeatureCollection of GeoJSON features, so we need to convert our data to that format
 export function createGeoJSONFromMarkers(
@@ -30,6 +21,44 @@ export function createGeoJSONFromMarkers(
     type: "FeatureCollection",
     features,
   };
+}
+
+// The coordinates are fixed to 6 decimal places to optimize DynamoDB storage and Mapbox rendering while still being accurate enough
+export function createDynamoDBItemFromMarker(
+  item: MarkerData
+): MarkerDynamoDBData {
+  return {
+    markerId: { N: item.markerId.toString() },
+    icon: { S: item.icon },
+    coordinates: {
+      M: {
+        latitude: { N: item.coordinates.latitude.toFixed(6) },
+        longitude: { N: item.coordinates.longitude.toFixed(6) },
+      },
+    },
+    ["customerId"]: { S: item.customerId },
+  };
+}
+
+export function getCustomers() {
+  return [
+    {
+      name: "customer-1",
+      sensors: 10,
+    },
+    {
+      name: "customer-2",
+      sensors: 100,
+    },
+    {
+      name: "customer-3",
+      sensors: 1000,
+    },
+    {
+      name: "customer-4",
+      sensors: 10000,
+    },
+  ];
 }
 
 export function getMapboxIconNames() {

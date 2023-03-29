@@ -92,7 +92,9 @@ export default function MapView({
           // get the feature at the mouse position
           const feature = getMarker(e.point);
           if (!feature) {
-            mapRef.current!.getCanvas().style.cursor = "";
+            if (mapRef.current) {
+              mapRef.current.getCanvas().style.cursor = "";
+            }
             return;
           }
 
